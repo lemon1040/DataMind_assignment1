@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
-from get_density_and_min_dis import *
+from fastSearchCluster import *
+savePath = os.getcwd() + r'\data\img' + '\\'
 
 
 def plot_diagram(x, y, x_label, y_label, title, show_index=False, index=None, above=0):
@@ -13,28 +14,22 @@ def plot_diagram(x, y, x_label, y_label, title, show_index=False, index=None, ab
     plt.title(title)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
-    plt.savefig(title + '.png')
+    plt.savefig(savePath + title + '.png')
     plt.show()
 
 
-def plot_cluster(x_label, y_label, title, clusters, vectors):
-    styles = ['b', 'g', 'r', 'c', 'm', 'y', 'k', '#9400D3', '#C0FF3E']
+def plot_cluster(x_label, y_label, title, clusters, vectors, boundary=None):
+    styles = ['b', 'g', 'r', 'c', 'm', 'y', '#9400D3', '#C0FF3E', '#FFD700', '#FFC0CB']
     plt.figure(0)
     plt.clf()
     for index, cluster in enumerate(clusters):
         for point in cluster:
             plt.plot(vectors[point, 0], vectors[point, 1], marker='.', color=styles[index])
+    if boundary is not None:
+        for point in boundary:
+            plt.plot(vectors[point, 0], vectors[point, 1], marker='.', color='k')
     plt.title(title)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
-    plt.savefig(title + '.png')
+    plt.savefig(savePath + title + '.png')
     plt.show()
-
-
-if __name__ == '__main__':
-    pre = Pretreatment()
-    pre.load_dis_data('output.txt')
-    dc = pre.get_dc()
-    pre.calculate_density(dc)
-    pre.calculate_delta()
-    plot_diagram(pre.result[:, 0], pre.result[:, 1], 'rho', 'delta', 'Decision Graph')
